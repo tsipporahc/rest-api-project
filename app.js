@@ -3,7 +3,7 @@
 // load modules
 const express = require('express');
 const morgan = require('morgan');
-const sequelize = require('./models/index.js').sequelize;
+const { sequelize, models } = require('./models/index');
 
 // variable to enable global error logging
 const enableGlobalErrorLogging =
@@ -26,8 +26,13 @@ app.get('/', (req, res) => {
 (async () => {
     await sequelize.sync();
     try {
-        await sequelize.authenticate(); //returns a promise that resolves to a successful, authenticated connection to the database.
-        console.log('Connection to the database successful!'); //tests the connection to the database!!
+        // Test the connection to the database
+        await sequelize.authenticate();
+        console.log('Connection to the database successful!');
+
+        // Sync the models
+        console.log('Synchronizing the models with the database...');
+        // await sequelize.sync({ force: true }); // removes your model and starts from zero every time you restart the app.
     } catch (error) {
         console.error('Error connecting to the database: ', error);
     }
