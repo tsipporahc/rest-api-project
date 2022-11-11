@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
 
 // test connection to database and sync model
 (async () => {
-    await sequelize.sync();
+    await sequelize.sync(); // await sequelize.sync({ force: true }); // removes your model and starts from zero every time you restart the app.
     try {
         // Test the connection to the database
         await sequelize.authenticate();
@@ -32,7 +32,6 @@ app.get('/', (req, res) => {
 
         // Sync the models
         console.log('Synchronizing the models with the database...');
-        // await sequelize.sync({ force: true }); // removes your model and starts from zero every time you restart the app.
     } catch (error) {
         console.error('Error connecting to the database: ', error);
     }
