@@ -3,7 +3,7 @@
 // load modules
 const express = require('express');
 const morgan = require('morgan');
-const { sequelize, models } = require('./models/index');
+const { sequelize, models } = require('./models/index.js');
 
 // variable to enable global error logging
 const enableGlobalErrorLogging =
