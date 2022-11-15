@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router(); // Construct a router instance.
 const { User, Course } = require('./models'); // import models
 const bcrypt = require('bcryptjs'); // hashes passwords
+const { authenticateUser } = require('./middleware/auth-user'); // protect specific routes in your application from unauthorized users
 
 /* 
 {
@@ -31,11 +32,14 @@ function asyncHandler(cb) {
 // Returns a list of users.
 router.get(
     '/users',
+    authenticateUser,
     asyncHandler(async (req, res) => {
-        const users = await User.findAll();
-        return res.status(200).json(users).end(); // 200 OK - http status code
+        const user = req.currentUser;
+        return res.status(200).json(user).end();
+        //const users = await User.findAll();
+        //return res.status(200).json(users).end(); // 200 OK - http status code
     })
-);
+); // route GET requests to the path "/api/users" first to our custom middleware function and then to the inline router handler function.
 
 // Creates a new user.
 router.post(
@@ -147,12 +151,19 @@ router.get(
 // Create a new course.
 router.post(
     '/courses',
+    authenticateUser,
     asyncHandler(async (req, res) => {
+        const user = req.currentUser;
+        res.status(200).json({
+            name: `${user.firstName} ${user.lastName}`,
+            emailAddress: user.emailAddress,
+        });
+
         try {
             const courses = await Course.create(req.body);
             res.location('/')
                 .status(201)
-                //.json({ message: 'Course successfully created!' })
+                .json({ message: 'Course successfully created!' })
                 .end();
         } catch (error) {
             if (
@@ -171,6 +182,7 @@ router.post(
 // Update a course.
 router.put(
     '/courses/:id',
+    authenticateUser,
     asyncHandler(async (req, res) => {
         let course;
         try {
@@ -197,6 +209,7 @@ router.put(
 // Delete a course
 router.delete(
     '/courses/:id',
+    authenticateUser,
     asyncHandler(async (req, res) => {
         const courses = await Course.findByPk(req.params.id);
         if (courses) {
