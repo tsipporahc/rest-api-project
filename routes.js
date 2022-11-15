@@ -36,6 +36,7 @@ router.get(
     asyncHandler(async (req, res) => {
         const user = req.currentUser;
         return res.status(200).json(user).end();
+
         //const users = await User.findAll();
         //return res.status(200).json(users).end(); // 200 OK - http status code
     })
