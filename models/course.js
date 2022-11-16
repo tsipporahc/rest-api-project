@@ -7,7 +7,6 @@ module.exports = (sequelize) => {
             id: {
                 type: Sequelize.INTEGER,
                 primaryKey: true,
-                //autoIncrement: true,
             },
             title: {
                 type: Sequelize.STRING,
@@ -35,16 +34,10 @@ module.exports = (sequelize) => {
             },
             estimatedTime: {
                 type: Sequelize.STRING,
-                //allowNull: false,
             },
             materialsNeeded: {
                 type: Sequelize.STRING,
-                //allowNull: false,
             },
-            /* userId: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            }, */
         },
         { sequelize }
     );
