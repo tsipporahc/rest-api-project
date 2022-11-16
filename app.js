@@ -45,14 +45,14 @@ app.get('/', (req, res) => {
 })();
 
 // send 404 if no other route matched
-/* app.use((req, res) => {
+app.use((req, res) => {
     res.status(404).json({
         message: 'Route Not Found',
     });
-}); */
+});
 
 // setup a global error handler
-/* app.use((err, req, res, next) => {
+app.use((err, req, res, next) => {
     if (enableGlobalErrorLogging) {
         console.error(`Global error handler: ${JSON.stringify(err.stack)}`);
     }
@@ -61,7 +61,7 @@ app.get('/', (req, res) => {
         message: err.message,
         error: {},
     });
-}); */
+});
 
 // set our port
 app.set('port', process.env.PORT || 5000);
