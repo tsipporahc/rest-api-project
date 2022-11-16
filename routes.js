@@ -49,15 +49,6 @@ router.post(
         try {
             // The user  is set from the request body.
             const user = await User.create(req.body);
-            console.log(user.password);
-            //user.password = bcrypt.hashSync(user.password, 10);
-            //console.log(user.password);
-
-            /* console.log(user.password);
-            if (user.password) {
-                user.password = bcrypt.hashSync(user.password, 10);
-            }
-            console.log(user.password); */
 
             // Set location header (redirect after creating new resources) and 201 Created http status code and end the response.
             res.location('/')
@@ -130,22 +121,6 @@ router.get(
             error.message = 'Sorry, this page is not found :(';
             throw error;
         }
-
-        /* try {
-            return res.status(200).json(courses).end();
-        } catch (error) {
-            console.log('ERROR: ', error.name);
-            // If there are any errors...
-            if (
-                error.name === 'SequelizeValidationError' ||
-                error.name === 'SequelizeUniqueConstraintError'
-            ) {
-                const errors = error.errors.map((err) => err.message);
-                res.status(400).json({ errors });
-            } else {
-                throw error;
-            }
-        } */
     })
 );
 
@@ -183,9 +158,7 @@ router.put(
         try {
             const course = await Course.findByPk(req.params.id);
             await course.update(req.body);
-            res.status(204)
-                //.json({ message: 'Course successfully updated!' })
-                .end();
+            res.status(204).end();
         } catch (error) {
             if (
                 error.name === 'SequelizeValidationError' ||
@@ -209,12 +182,7 @@ router.delete(
         const courses = await Course.findByPk(req.params.id);
         if (courses) {
             await courses.destroy();
-            return (
-                res
-                    .status(204)
-                    //.json({ message: 'Course was successfully deleted.' })
-                    .end()
-            );
+            return res.status(204).end();
         } else {
             const error = new Error(); // custom error object
             error.status = 404;
