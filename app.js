@@ -52,7 +52,7 @@ app.get('/', (req, res) => {
 }); */
 
 // setup a global error handler
-app.use((err, req, res, next) => {
+/* app.use((err, req, res, next) => {
     if (enableGlobalErrorLogging) {
         console.error(`Global error handler: ${JSON.stringify(err.stack)}`);
     }
@@ -61,7 +61,7 @@ app.use((err, req, res, next) => {
         message: err.message,
         error: {},
     });
-});
+}); */
 
 // set our port
 app.set('port', process.env.PORT || 5000);

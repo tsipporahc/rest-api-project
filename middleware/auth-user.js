@@ -49,17 +49,15 @@ exports.authenticateUser = async (req, res, next) => {
         message = 'Auth header not found';
     }
 
+    // If user authentication failed...
+    // Return a response with a 401 Unauthorized HTTP status code.
+
+    // Or if user authentication succeeded...
+    // Call the next() method.
     if (message) {
         console.warn(message);
         res.status(401).json({ message: 'Access Denied' });
     } else {
         next();
     }
-
-    // If user authentication failed...
-    // Return a response with a 401 Unauthorized HTTP status code.
-
-    // Or if user authentication succeeded...
-    // Call the next() method.
-    next();
 };
