@@ -51,10 +51,7 @@ router.post(
             const user = await User.create(req.body);
 
             // Set location header (redirect after creating new resources) and 201 Created http status code and end the response.
-            res.location('/')
-                .status(201)
-                .json({ message: 'Account successfully created!' })
-                .end();
+            res.location('/').status(201).end();
 
             /* // Validate that we have a `name` value.
             if (!user.name) {
@@ -131,10 +128,7 @@ router.post(
     asyncHandler(async (req, res) => {
         try {
             const courses = await Course.create(req.body);
-            res.location('/')
-                .status(201)
-                .json({ message: 'Course successfully created!' })
-                .end();
+            res.location('/').status(201).end();
         } catch (error) {
             if (
                 error.name === 'SequelizeValidationError' ||
