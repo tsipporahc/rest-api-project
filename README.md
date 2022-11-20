@@ -1,6 +1,7 @@
 # rest-api-project
 
 Treehouse Techdegree Unit 9 Project
+
 REST API using Express, Node.js, and Sequelize
 
 **Purpose:**
