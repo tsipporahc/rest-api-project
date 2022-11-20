@@ -37,8 +37,7 @@ router.get(
         const user = req.currentUser;
         return res.status(200).json(user).end();
 
-        //const users = await User.findAll();
-        //return res.status(200).json(users).end(); // 200 OK - http status code
+        //const users = await User.findAll(); // returns all users
     })
 ); // route GET requests to the path "/api/users" first to our custom middleware function and then to the inline router handler function.
 
@@ -47,39 +46,11 @@ router.post(
     '/users',
     asyncHandler(async (req, res) => {
         try {
-            // The user  is set from the request body.
+            // The user is set from the request body.
             const user = await User.create(req.body);
 
             // Set location header (redirect after creating new resources) and 201 Created http status code and end the response.
             res.location('/').status(201).end();
-
-            /* // Validate that we have a `name` value.
-            if (!user.name) {
-                // The `user.name` property isn't defined or is set to `undefined`, `null`, or an empty string
-                errors.push({
-                    message: `The request body must contain a "name" field set to the user's name`,
-                    userMessage: 'Please provide a value for "name"',
-                });
-            }
-
-            // Validate that we have an `email` value.
-            if (!user.email) {
-                errors.push({
-                    message: `The request body must contain a "email" field set to the user's email address`,
-                    userMessage: 'Please provide a value for "email"',
-                });
-            }
-
-            // Validate that we have a `password` value.
-            if (!user.password) {
-                errors.push('Please provide a value for "password"');
-            } else if (password.length < 8 || password.length > 20) {
-                errors.push(
-                    'Your password should be between 8 and 20 characters'
-                );
-            } else {
-                user.password = bcrypt.hashSync(user.password, 10);
-            } */
         } catch (error) {
             console.log('ERROR: ', error.name);
             // If there are any errors...
@@ -100,7 +71,14 @@ router.post(
 router.get(
     '/courses',
     asyncHandler(async (req, res) => {
-        const courses = await Course.findAll();
+        const courses = await Course.findAll({
+            include: [
+                {
+                    model: User,
+                    attributes: ['firstName', 'lastName', 'emailAddress'],
+                },
+            ],
+        });
         return res.status(200).json(courses).end();
     })
 );
@@ -109,7 +87,14 @@ router.get(
 router.get(
     '/courses/:id',
     asyncHandler(async (req, res) => {
-        const course = await Course.findByPk(req.params.id);
+        const course = await Course.findByPk(req.params.id, {
+            include: [
+                {
+                    model: User,
+                    attributes: ['firstName', 'lastName', 'emailAddress'],
+                },
+            ],
+        });
         if (course) {
             return res.status(200).json(course).end();
         } else {
@@ -127,8 +112,8 @@ router.post(
     authenticateUser,
     asyncHandler(async (req, res) => {
         try {
-            const courses = await Course.create(req.body);
-            res.location('/').status(201).end();
+            const course = await Course.create(req.body);
+            res.location(`/courses/${course.id}`).status(201).end();
         } catch (error) {
             if (
                 error.name === 'SequelizeValidationError' ||
